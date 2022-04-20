@@ -1,5 +1,7 @@
-class ItemsController < ApplicationController
-  before_action :set_item, only: %i[ show update destroy ]
+# frozen_string_literal: true
+
+class ItemsController < ApplicationController # rubocop:disable Style/Documentation
+  before_action :set_item, only: %i[show update destroy]
 
   # GET /items
   # GET /items.json
@@ -9,18 +11,26 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   # GET /items/1.json
-  def show
-  end
+  def show; end
 
   # POST /items
   # POST /items.json
-  def create
-    @item = Item.new(item_params)
+  def create # rubocop:disable Metrics/MethodLength
+    begin
+      json_params = JSON.parse(request.raw_post)
+      check_category = Category.find(json_params['categories'])
+    rescue ActiveRecord::RecordNotFound
+      check_category = nil
+    end
 
-    if @item.save
-      render :show, status: :created, location: @item
+    if check_category.nil?
+      validation_error('category not found')
     else
-      render json: @item.errors, status: :unprocessable_entity
+      @item = Item.create(name: json_params['name'], description: json_params['description'], price: json_params['price'])
+      json_params['categories'].each do |category|
+        ItemCategory.create(item_id: @item.id,category_id: category)
+      end
+      @item.id.nil? ? validation_error('Item duplicate') : response_success('Item created')
     end
   end
 
@@ -41,13 +51,14 @@ class ItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.require(:item).permit(:name, :description, :price)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def item_params
+    params.require(:item).permit(:name, :description, :price)
+  end
 end

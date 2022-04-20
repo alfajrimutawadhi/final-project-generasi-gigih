@@ -18,6 +18,10 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
   # This should return the minimal set of attributes required to create a valid
   # Item. As you add validations to Item, be sure to
   # adjust the attributes here as well.
+  before(:all) do
+    @category = Category.create(id: 1, name: 'Main Dish')
+  end
+
   let(:valid_attributes) do
     FactoryBot.attributes_for(:item, description: 'Special Food')
   end
@@ -55,7 +59,7 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
       it 'creates a new Item' do
         expect do
           post items_url,
-               params: { item: valid_attributes }, headers: valid_headers, as: :json
+               params: { item: valid_attributes, categories: [@category.id] }, headers: valid_headers, as: :json # rubocop:disable Layout/LineLength
         end.to change(Item, :count).by(1)
       end
 
