@@ -24,23 +24,40 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     end
 
     if check_category.nil?
-      validation_error('category not found')
+      validation_error('Category not found')
     else
       @item = Item.create(name: json_params['name'], description: json_params['description'], price: json_params['price'])
       json_params['categories'].each do |category|
         ItemCategory.create(item_id: @item.id,category_id: category)
       end
-      @item.id.nil? ? validation_error('Item duplicate') : response_success('Item created')
+      @item.id.nil? ? validation_error('Item name already was taken') : response_success('Item created')
     end
   end
 
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
-    if @item.update(item_params)
-      render :show, status: :ok, location: @item
+    begin
+      json_params = JSON.parse(request.raw_post)
+      check_category = Category.find(json_params['categories'])
+    rescue ActiveRecord::RecordNotFound
+      check_category = nil
+    end
+
+    check_name = Item.find_by(name: json_params['name'])
+    
+    if check_category.nil?
+      validation_error('Category not found')
+    elsif check_name.present?
+      validation_error('Item name already was taken')
     else
-      render json: @item.errors, status: :unprocessable_entity
+      @item.update(name: json_params['name'], description: json_params['description'], price: json_params['price'])
+      find_category = ItemCategory.where(item_id: @item.id)
+      find_category.destroy_all
+      json_params['categories'].each do |category|
+        ItemCategory.create(item_id: @item.id, category_id: category)
+      end
+      response_success('Item updated')
     end
   end
 
