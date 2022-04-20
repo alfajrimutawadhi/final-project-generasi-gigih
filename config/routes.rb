@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'order/', to: 'order#index'
-  get 'order/show'
+  get 'order/:id/detail', to: 'order#show'
   get 'order/create'
   get 'order/update'
   resources :items
