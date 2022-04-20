@@ -9,7 +9,4 @@ class ApplicationController < ActionController::Base
     return render json: { status: :ok, message: message.to_s, data: {} }
   end
 
-  def response_created(message)
-    return render json: { status: :created, message: message.to_s, data: {} }
-  end
 end

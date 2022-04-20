@@ -65,8 +65,8 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
 
       it 'renders a JSON response with the new item' do
         post items_url,
-             params: { item: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
+             params: { item: valid_attributes, categories: [@category.id] }, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
@@ -75,13 +75,13 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
       it 'does not create a new Item' do
         expect do
           post items_url,
-               params: { item: invalid_attributes }, as: :json
+               params: { item: invalid_attributes, categories: [@category.id] }, as: :json
         end.to change(Item, :count).by(0)
       end
 
       it 'renders a JSON response with errors for the new item' do
         post items_url,
-             params: { item: invalid_attributes }, headers: valid_headers, as: :json
+             params: { item: invalid_attributes, categories: [@category.id] }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
@@ -97,7 +97,7 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
       it 'updates the requested item' do
         item = Item.create! valid_attributes
         patch item_url(item),
-              params: { item: new_attributes }, headers: valid_headers, as: :json
+              params: { item: new_attributes, categories: [@category.id] }, headers: valid_headers, as: :json
         item.reload
         expect(item.description).to eq('Nothing Special')
       end
@@ -105,7 +105,7 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
       it 'renders a JSON response with the item' do
         item = Item.create! valid_attributes
         patch item_url(item),
-              params: { item: new_attributes }, headers: valid_headers, as: :json
+              params: { item: new_attributes, categories: [@category.id] }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
       end
@@ -115,7 +115,7 @@ RSpec.describe '/items', type: :request do # rubocop:disable Metrics/BlockLength
       it 'renders a JSON response with errors for the item' do
         item = Item.create! valid_attributes
         patch item_url(item),
-              params: { item: invalid_attributes }, headers: valid_headers, as: :json
+              params: { item: invalid_attributes, categories: [@category.id] }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including('application/json'))
       end

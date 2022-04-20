@@ -41,7 +41,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
         json_params['categories'].each do |category|
           ItemCategory.create(item_id: @item.id,category_id: category)
         end
-        response_success('Item created')
+        response_success("Item created")
       else
         render json: @item.errors, status: :unprocessable_entity
       end
