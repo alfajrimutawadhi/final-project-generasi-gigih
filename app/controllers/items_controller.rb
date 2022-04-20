@@ -18,7 +18,10 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   # GET /items/1
   # GET /items/1.json
-  def show; end
+  def show
+    item_category = ItemCategory.where(item_id: params[:id])
+    render json: @item.as_json.merge(categories: Category.where(id: item_category.pluck(:category_id)).as_json)
+  end
 
   # POST /items
   # POST /items.json
