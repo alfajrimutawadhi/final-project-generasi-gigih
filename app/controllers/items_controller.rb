@@ -36,11 +36,15 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     if check_category.nil?
       validation_error('Category not found')
     else
-      @item = Item.create(name: json_params['name'], description: json_params['description'], price: json_params['price'])
-      json_params['categories'].each do |category|
-        ItemCategory.create(item_id: @item.id,category_id: category)
+      @item = Item.new(item_params)
+      if @item.save
+        json_params['categories'].each do |category|
+          ItemCategory.create(item_id: @item.id,category_id: category)
+        end
+        response_success('Item created')
+      else
+        render json: @item.errors, status: :unprocessable_entity
       end
-      @item.id.nil? ? validation_error('Item name already was taken') : response_success('Item created')
     end
   end
 
