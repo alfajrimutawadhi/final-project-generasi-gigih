@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+Customer.create(name: "fajri", email: "fajri@gmail.com")
+Customer.create(name: "nazla", email: "nazla@gmail.com")
+
 Item.create(name: "Nasi Goreng", description: "Nasi goreng enak", price: 10000)
 Item.create(name: "Nasi Uduk", description: "Nasi uduk enak", price: 9000)
 Item.create(name: "Nasi Ayam", description: "Nasi ayam enak", price: 12000)
@@ -44,3 +47,12 @@ ItemCategory.create(item_id: 9, category_id: 2)
 ItemCategory.create(item_id: 9, category_id: 4)
 ItemCategory.create(item_id: 10, category_id: 2)
 ItemCategory.create(item_id: 10, category_id: 6)
+
+Order.create(status: "PROSES", total: 100000, customer_id: 1)
+OrderDetail.create(order_id: 1, item_id: 1, quantity: 2, item_price: 2000)
+OrderDetail.create(order_id: 1, item_id: 2, quantity: 1, item_price: 6000)
+
+Order.create(status: "PROSES", total: 100000, customer_id: 2)
+OrderDetail.create(order_id: 2, item_id: 3, quantity: 1, item_price: 10000)
+OrderDetail.create(order_id: 2, item_id: 4, quantity: 1, item_price: 10000)
+OrderDetail.create(order_id: 2, item_id: 5, quantity: 1, item_price: 10000)

@@ -8,5 +8,4 @@ class ApplicationController < ActionController::Base
   def response_success(message)
     return render json: { status: :ok, message: message.to_s, data: {} }
   end
-
 end
