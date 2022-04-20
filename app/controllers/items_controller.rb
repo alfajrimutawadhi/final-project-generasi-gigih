@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class ItemsController < ApplicationController # rubocop:disable Style/Documentation
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
   before_action :set_item, only: %i[show update destroy]
+
+
+  def render_404
+    render json: { error: 'Item not found' }, status: 404
+  end
 
   # GET /items
   # GET /items.json
