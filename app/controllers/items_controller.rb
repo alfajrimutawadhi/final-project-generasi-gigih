@@ -12,7 +12,8 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    @items = Item.all.as_json
+    render json: @items
   end
 
   # GET /items/1
