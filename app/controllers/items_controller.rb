@@ -57,21 +57,20 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     rescue ActiveRecord::RecordNotFound
       check_category = nil
     end
-
-    check_name = Item.find_by(name: json_params['name'])
     
     if check_category.nil?
       validation_error('Category not found')
-    elsif check_name.present?
-      validation_error('Item name already was taken')
     else
-      @item.update(name: json_params['name'], description: json_params['description'], price: json_params['price'])
-      find_category = ItemCategory.where(item_id: @item.id)
-      find_category.destroy_all
-      json_params['categories'].each do |category|
-        ItemCategory.create(item_id: @item.id, category_id: category)
+      if @item.update(item_params)
+        find_category = ItemCategory.where(item_id: @item.id)
+        find_category.destroy_all
+        json_params['categories'].each do |category|
+          ItemCategory.create(item_id: @item.id, category_id: category)
+        end
+        response_success('Item updated')
+      else
+        render json: @item.errors, status: :unprocessable_entity
       end
-      response_success('Item updated')
     end
   end
 
