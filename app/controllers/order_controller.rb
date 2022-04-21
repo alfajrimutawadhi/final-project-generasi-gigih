@@ -58,5 +58,12 @@ class OrderController < ApplicationController
   end
 
   def update
+    json_params = JSON.parse(request.raw_post)
+    @order = Order.find(params[:id])
+    if @order.update(status: json_params['status'])
+      response_success("Order updated")
+    else
+      render json: @order.errors, status: :unprocessable_entity
+    end
   end
 end
