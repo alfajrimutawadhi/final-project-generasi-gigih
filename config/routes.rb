@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'order/', to: 'order#index'
   get 'order/:id/detail', to: 'order#show'
-  get 'order/create'
+  post 'order/', to: 'order#create'
   get 'order/update'
   resources :items
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -18,6 +18,30 @@ class OrderController < ApplicationController
   end
 
   def create
+    begin
+      json_params = JSON.parse(request.raw_post)
+      check_customer = Customer.find(json_params['customer_id'])
+    rescue ActiveRecord::RecordNotFound
+      check_customer = nil
+    end
+
+    if check_customer.nil?
+      validation_error('Customer not found')
+    else
+      total = 0
+      json_params['items'].each do |item|
+        total += Item.find(item['id']).price * item['quantity']
+      end
+      @order = Order.new(customer_id: json_params['customer_id'], status: json_params['status'], total: total)
+      if @order.save
+        json_params['items'].each do |item|
+          OrderDetail.create(order_id: @order.id, item_id: item['id'], quantity: item['quantity'], item_price: Item.find(item['id']).price)
+        end
+        response_success("Order created")
+      else
+        render json: @order.errors, status: :unprocessable_entity
+      end
+    end
   end
 
   def update
