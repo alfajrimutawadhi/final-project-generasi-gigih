@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_19_141652) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order_id", null: false
-    t.integer "item_id", null: false
+    t.integer "item_id"
     t.index ["item_id"], name: "index_order_details_on_item_id"
     t.index ["order_id"], name: "index_order_details_on_order_id"
   end

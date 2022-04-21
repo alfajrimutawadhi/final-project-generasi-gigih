@@ -52,7 +52,7 @@ Order.create(status: "PROSES", total: 100000, customer_id: 1)
 OrderDetail.create(order_id: 1, item_id: 1, quantity: 2, item_price: 2000)
 OrderDetail.create(order_id: 1, item_id: 2, quantity: 1, item_price: 6000)
 
-Order.create(status: "PROSES", total: 100000, customer_id: 2)
+Order.create(status: "PROSES", total: 50000, customer_id: 2)
 OrderDetail.create(order_id: 2, item_id: 3, quantity: 1, item_price: 10000)
 OrderDetail.create(order_id: 2, item_id: 4, quantity: 1, item_price: 10000)
 OrderDetail.create(order_id: 2, item_id: 5, quantity: 1, item_price: 10000)

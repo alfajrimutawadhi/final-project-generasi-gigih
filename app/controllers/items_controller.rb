@@ -77,8 +77,8 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    find_category = ItemCategory.where(item_id: @item.id)
-    find_category.destroy_all
+    ItemCategory.where(item_id: @item.id).destroy_all
+    OrderDetail.where(item_id: @item.id).update_all(item_id: nil)
     @item.destroy
     response_success('Item deleted')
   end
