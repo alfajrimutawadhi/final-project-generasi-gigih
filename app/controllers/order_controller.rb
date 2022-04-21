@@ -25,21 +25,34 @@ class OrderController < ApplicationController
       check_customer = nil
     end
 
+    begin
+      check_item = nil
+      json_params['items'].each do |item|
+        check_item = Item.find(item['id'])
+      end
+    rescue ActiveRecord::RecordNotFound
+      check_item = nil
+    end
+
     if check_customer.nil?
       validation_error('Customer not found')
     else
-      total = 0
-      json_params['items'].each do |item|
-        total += Item.find(item['id']).price * item['quantity']
-      end
-      @order = Order.new(customer_id: json_params['customer_id'], status: json_params['status'], total: total)
-      if @order.save
-        json_params['items'].each do |item|
-          OrderDetail.create(order_id: @order.id, item_id: item['id'], quantity: item['quantity'], item_price: Item.find(item['id']).price)
-        end
-        response_success("Order created")
+      if check_item.nil?
+        validation_error('Item not found')
       else
-        render json: @order.errors, status: :unprocessable_entity
+        total = 0
+        json_params['items'].each do |item|
+          total += Item.find(item['id']).price * item['quantity']
+        end
+        @order = Order.new(customer_id: json_params['customer_id'], status: json_params['status'], total: total)
+        if @order.save
+          json_params['items'].each do |item|
+            OrderDetail.create(order_id: @order.id, item_id: item['id'], quantity: item['quantity'], item_price: Item.find(item['id']).price)
+          end
+          response_success("Order created")
+        else
+          render json: @order.errors, status: :unprocessable_entity
+        end
       end
     end
   end
