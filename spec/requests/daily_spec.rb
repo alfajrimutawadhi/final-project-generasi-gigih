@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Dailies", type: :request do
   describe "GET /index" do
     it "returns http success" do
-      get "/daily/index"
+      get "/daily"
       expect(response).to have_http_status(:success)
     end
   end
