@@ -1,6 +1,6 @@
 class DailyController < ApplicationController
   def index
-    @daily = Order.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day).as_json.map do |order|
+    @daily = Order.get_order_now.as_json.map do |order|
       order.merge(customer: Customer.find(order['customer_id']).as_json)
     end
     render json: @daily
@@ -10,7 +10,7 @@ class DailyController < ApplicationController
     if params['email'].present?
       customer = Customer.find_by(email: params['email'])
       if customer.present?
-        @daily = Order.where(customer_id: customer.id, created_at: Date.today.beginning_of_day..Date.today.end_of_day).as_json.map do |order|
+        @daily = Order.get_order_now.where(customer_id: customer.id).as_json.map do |order|
           order.merge(customer: Customer.find(order['customer_id']).as_json)
         end
         render json: @daily
@@ -23,6 +23,26 @@ class DailyController < ApplicationController
   end
 
   def byTotal
+    if params['total'].present?
+      if params['morethan'] == 'true'
+        @daily = Order.get_order_now.where('total > ?', params['total']).as_json.map do |order|
+          order.merge(customer: Customer.find(order['customer_id']).as_json)
+        end
+        render json: @daily
+      elsif params['lessthan'] == 'true'
+        @daily = Order.get_order_now.where('total < ?', params['total']).as_json.map do |order|
+          order.merge(customer: Customer.find(order['customer_id']).as_json)
+        end
+        render json: @daily
+      else
+        @daily = Order.get_order_now.where(total: params['total']).as_json.map do |order|
+          order.merge(customer: Customer.find(order['customer_id']).as_json)
+        end
+        render json: @daily
+      end
+    else
+      validation_error('Request total not found')
+    end
   end
 
   def byRangeDate

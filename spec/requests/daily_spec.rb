@@ -8,9 +8,9 @@ RSpec.describe "Dailies", type: :request do
     end
   end
 
-  describe "GET /byCustomer" do
+  describe "GET /byEmail" do
     it "returns http success" do
-      get "/daily/byCustomer"
+      get "/daily/byEmail"
       expect(response).to have_http_status(:success)
     end
   end
