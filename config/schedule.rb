@@ -19,6 +19,6 @@ set :output, "log/cron_log.log"
 
 # Learn more: http://github.com/javan/whenever
 
-every 1.day, at: '5:00 pm' do
+every 1.day, at: '5:00 am' do
     runner "Order.change_status_be_canceled"
 end

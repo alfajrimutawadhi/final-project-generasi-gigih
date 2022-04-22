@@ -6,6 +6,6 @@ class Order < ApplicationRecord
   has_many :items, through: :order_details
 
   def self.change_status_be_canceled
-    where.not(status: "PAID").update_all(status: "CANCELED")
+    where.not(status: "PAID").and(Order.where(created_at: Date.today.beginning_of_day..Date.today.end_of_day)).update_all(status: "CANCELED")
   end
 end
