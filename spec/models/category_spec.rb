@@ -12,7 +12,6 @@ RSpec.describe Category, type: :model do
     end
 
     it 'is valid with a name' do
-      category.name = 'Main Dish'
       expect(category).to be_valid
     end
 

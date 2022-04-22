@@ -1,0 +1,5 @@
+create file .replit and replit.nix
+copy from other project in replit
+repair gem tzinfo and ruby version in gemfile
+delete master.key and credentials.yml.enc in config
+run -> EDITOR="mate --wait" bin/rails credentials:edit

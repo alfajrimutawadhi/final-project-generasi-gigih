@@ -38,8 +38,8 @@ RSpec.describe Item, type: :model do # rubocop:disable Metrics/BlockLength
     end
 
     it 'is valid with item have category' do
-      item = Item.create(name: 'Nasi Goreng', description: 'Nasi goreng yang enak', price: 10_000)
-      category = Category.create(name: 'Main Dish')
+      item = Item.create(name: 'Ice Cream', description: 'Ice cream yang enak', price: 10_000)
+      category = Category.create(name: 'Dissert')
       ItemCategory.create(item_id: item.id, category_id: category.id)
       check_category = Item.get_category_by_id(item.id).count > 0
       expect(check_category).to be true
@@ -57,7 +57,7 @@ RSpec.describe Item, type: :model do # rubocop:disable Metrics/BlockLength
   describe 'self#get_category_by_id' do
     it 'returns the category of the item' do
       item = Item.create(name: 'Nasi Goreng', description: 'Nasi goreng yang enak', price: 10_000)
-      category = Category.create(name: 'Main Dish')
+      category = Category.create(name: 'Traditional')
       ItemCategory.create(item_id: item.id, category_id: category.id)
       get_category_by_id = Item.get_category_by_id(item.id)
       expect(get_category_by_id.count).to eq 1
