@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'daily', to: 'daily#index'
-  get 'daily/byCustomer'
+  get 'daily/byEmail', to: 'daily#byEmail'
   get 'daily/byTotal'
   get 'daily/byRangeDate'
 
