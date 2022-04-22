@@ -46,5 +46,13 @@ class DailyController < ApplicationController
   end
 
   def byRangeDate
+    if params['start'].present? && params['end'].present?
+      @daily = Order.get_order_by_range_date(params['start'], params['end']).as_json.map do |order|
+        order.merge(customer: Customer.find(order['customer_id']).as_json)
+      end
+      render json: @daily
+    else
+      validation_error('Request start_date and end_date not found')
+    end
   end
 end
