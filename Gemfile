@@ -78,5 +78,4 @@ group :development, :test do
   gem 'rails-controller-testing'
 end
 
-# gem 'rubocop', require: false
 gem 'whenever', require: false
