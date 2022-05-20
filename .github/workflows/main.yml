@@ -42,7 +42,7 @@ jobs:
       - name: login docker registry
         uses: azure/docker-login@v1
         with:
-          login-server: dzbuild.azurecr.io
+          login-server: pipelinedemoku.azurecr.io
           username: S{{ secrets.acr_dzbuild_username }}
           password: ${{ secrets.acr_dzbuild_password }}
       - name: build image
