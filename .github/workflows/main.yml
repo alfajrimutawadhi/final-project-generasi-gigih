@@ -38,12 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: azure/docker-login@v1
+      - uses: actions/checkout@v3
+      - name: login docker registry
+        uses: azure/docker-login@v1
         with:
           login-server: dzbuild.azurecr.io
           username: S{{ secrets.acr_dzbuild_username }}
           password: ${{ secrets.acr_dzbuild_password }}
-      - uses: actions/checkout@v3
       - name: build image
         run: docker build -t pipelinedemoku.azurecr.io/final-project:latest .
       - name: push registry
