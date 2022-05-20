@@ -34,10 +34,39 @@ jobs:
       - name: Run rails test
         run: bundle exec rspec -fd
 
-  build-image:
+  build-push:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v3
       - name: build image
         run: docker build -t final-project:latest .
+      - name: push registry
+        run: echo "push registry"
+  
+  deploy-to-staging:
+    runs-on: ubuntu-latest
+    needs: build-push
+    steps:
+      - uses: actions/checkout@v3
+      - name: deploy staging
+        run: echo "deploy staging"
+
+  deploy-to-production:
+    runs-on: ubuntu-latest
+    needs: build-push
+    if: github.ref == "refs/head/master"
+    steps:
+      - uses: actions/checkout@v3
+      - name: deploy production
+        run: echo "deploy production"
+
+  send-telegram-group:
+    runs-on: ubuntu-latest
+    needs: build-push
+    if: github.ref == "refs/head/master"
+    steps:
+      - uses: actions/checkout@v3
+      - name: send to tele group
+        run: echo "send to tele group"
+    
