@@ -23,7 +23,9 @@ jobs:
         uses: ruby/setup-ruby@2b019609e2b0f1ea1a2bc8ca11cb82ab46ada124
         with:
           ruby-version: '3.0'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: bundle install
+        run: bundle install
+          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       # 3. migrate
       - name: migration 🤫
         run: rails db:migrate
